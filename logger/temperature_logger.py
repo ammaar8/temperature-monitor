@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 
 try:
     arduino = serial.Serial(
-        port='/dev/ttyACM0',
+        port='/dev/ttyACM0', # Replace with Arduino path
         baudrate=9600,
         timeout=0.1)
 except serial.SerialException as e:
@@ -71,11 +71,11 @@ def log_reading():
         print("Data logged at", ts)
 
 def main():
-    last_log = datetime.now(pytz.timezone("Asia/Calcutta"))
+    last_log = datetime.now(pytz.timezone("Asia/Calcutta")) # Adjust Timezone if required
     print("Data logging started!")
     while True:
-        current_time = datetime.now(pytz.timezone("Asia/Calcutta"))
-        if current_time - last_log > timedelta(minutes=1):
+        current_time = datetime.now(pytz.timezone("Asia/Calcutta")) # Adjust Timezone if required
+        if current_time - last_log > timedelta(minutes=5): # Delay between two readings
             log_reading()
             last_log = current_time
             
