@@ -16,6 +16,7 @@ app = dash.Dash(
         {"name": "viewport", "content": "width=device-width, initial-scale=1"}
     ],
 )
+app.title = "Temp Monitor"
 server = app.server
 conn = temperature_pd.connect_database()
 df = temperature_pd.data_today(conn)
