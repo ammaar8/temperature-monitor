@@ -1,0 +1,84 @@
+#!/usr/bin/python3
+import serial
+import time
+import sched
+import psycopg2
+import os
+import pytz
+from datetime import datetime, timedelta
+
+try:
+    arduino = serial.Serial(
+        port='/dev/ttyACM0',
+        baudrate=9600,
+        timeout=0.1)
+except serial.SerialException as e:
+    print(e)
+
+def connect_database():
+    DATABASE_URL = os.environ['DATABASE_URL']
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    print("Connected to database")
+    return conn
+
+def read_data():
+    data = arduino.readline().decode('utf-8')[:-2]
+    if not data == "":
+        t, h = data.split(',')
+        t = float(t)
+        h = float(h)
+    return t, h
+
+def request_data():
+    arduino.write('a'.encode())
+
+def insert_data(ts, t, h):
+    try:
+        conn = connect_database()
+        cur = conn.cursor()
+        cur.execute(
+            """INSERT INTO dht_data (created_on, temperature, humidity) values (%s,%s,%s)""",
+            (ts, t, h)
+        )
+        cur.close()
+        conn.commit()
+        conn.close()
+        print("Inserted data", ts, t, h)
+    except Exception as e:
+        print(e)
+
+
+def log_reading():
+    params = config()
+    conn = psycopg2.connect(**params)
+    arduino.write('a'.encode())
+    time.sleep(2)
+    data = arduino.readline().decode('utf-8')[:-2]
+    if not data == "":
+        t, h = data.split(',')
+        t = float(t)
+        h = float(h)
+        conn = connect_database()
+        cur = conn.cursor()
+        ts = datetime.now(pytz.timezone("Asia/Calcutta"))
+        cur.execute(
+            """INSERT INTO dht_data (created_on, temperature, humidity) values (%s,%s,%s)""",
+            (ts, t, h)
+        )
+        cur.close()
+        conn.commit()
+        conn.close()
+        print("Data logged at", ts)
+
+def main():
+    last_log = datetime.now(pytz.timezone("Asia/Calcutta"))
+    print("Data logging started!")
+    while True:
+        current_time = datetime.now(pytz.timezone("Asia/Calcutta"))
+        if current_time - last_log > timedelta(minutes=1):
+            log_reading()
+            last_log = current_time
+            
+
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,169 @@
+import dash
+import dash_core_components as dcc
+import dash_html_components as html
+import dash_bootstrap_components as dbc
+import plotly.express as px
+import temperature_pd
+import plotly.graph_objects as go
+from datetime import datetime
+import pandas as pd
+import math
+
+app = dash.Dash(
+    __name__,
+    external_stylesheets=[dbc.themes.BOOTSTRAP],
+    meta_tags=[
+        {"name": "viewport", "content": "width=device-width, initial-scale=1"}
+    ],
+)
+server = app.server
+conn = temperature_pd.connect_database()
+df = temperature_pd.data_today(conn)
+temp_max = df['temperature'].max()
+temp_min = df['temperature'].min()
+humidity_max = df['humidity'].max()
+humidity_min = df['humidity'].min()
+temperature_fig = px.line(x=df['time'], y=df['temperature'])
+humidity_fig = px.line(x=df['time'], y=df['humidity'])
+
+temperature_layout = {
+    "plot_bgcolor": "rgba(0, 0, 0, 0)",
+    "paper_bgcolor": "rgba(0, 0, 0, 0)",
+    "yaxis": {
+        "showgrid": False,
+    #     "nticks": 2,
+        "tickmode": "array",
+        "tickvals": [temp_min, temp_max], 
+        "title_text": None,
+        "zeroline": False,
+        "fixedrange": True,
+        "ticktext": [f"{temp_min}", f"{temp_max}"],
+        "tickfont": {"size": 20}
+    },
+    "xaxis": {
+        "showgrid": False,
+    #     "nticks": 3,
+    #     "tickmode": "array",
+    #     "tickvals": [0, 1, 2], 
+        "title_text": None,
+        "zeroline": False,
+        "fixedrange": True,
+        "tickformat": "%H:%M",        
+    #     "ticktext": [f"0", f"12", f"24"],
+    #     "tickfont": {"size": 16}
+    },
+    "showlegend": False,
+    "margin": {"l":4,"r":4,"t":0, "b":0, "pad": 4}
+}
+
+humidity_layout = {
+    "plot_bgcolor": "rgba(0, 0, 0, 0)",
+    "paper_bgcolor": "rgba(0, 0, 0, 0)",
+    "yaxis": {
+        "showgrid": False,
+    #     "nticks": 2,
+        "tickmode": "array",
+        "tickvals": [math.floor(humidity_min), math.ceil(humidity_max)], 
+        "title_text": None,
+        "zeroline": False,
+        "fixedrange": True,
+        "ticktext": [f"{math.floor(humidity_min)}", f"{math.ceil(humidity_max)}"],
+        "tickfont": {"size": 20}
+    },
+    "xaxis": {
+        "showgrid": False,
+    #     "nticks": 3,
+    #     "tickmode": "array",
+    #     "tickvals": [0, 1, 2], 
+        "title_text": None,
+        "zeroline": False,
+        "fixedrange": True,
+        "tickformat": "%H:%M",
+    #     "tickfont": {"size": 16}
+    },
+    "showlegend": False,
+    "margin": {"l":4,"r":4,"t":0, "b":0, "pad": 4}
+}
+config = {'displayModeBar': False}
+
+temperature_fig.update_layout(temperature_layout)
+temperature_fig.update_traces(line={"color":"black"})
+humidity_fig.update_layout(humidity_layout)
+humidity_fig.update_traces(line={"color":"black"})
+
+app.layout = dbc.Container(
+    children=[
+        dbc.Row(children=[
+                dbc.Col(
+                        html.Img(
+                            src="assets/logo.png",
+                            style={
+                                "max-height": "2em",
+                            },
+                        ),
+                    xs="6"
+                    ),
+                dbc.Col(
+                        html.H2(
+                            f"{datetime.now().strftime('%B %d')}",
+                            className="text-right text-bottom mb-0",
+                        ),
+                    xs="6"
+                    ),
+            ],
+            style={"padding": "3em 1em", "height": "20vh"},
+            justify="between",
+            no_gutters=True,
+        ),
+        dbc.Row(children=[
+                    html.Div(
+                        dbc.Card(
+                            dbc.CardBody(children=[
+                                dcc.Graph(figure = temperature_fig, config=config, style={"height": "100%"}),
+                                html.P("°C", style={
+                                    "position":"absolute", "font-size":"1.7em", "right":"0.3em", "top": "0em",
+                                    "color": "#323841ff",
+                                    })
+                                ]
+                            ),
+                            style={
+                                "background": "linear-gradient(60deg, rgba(249,249,249,0.5), rgba(249,249,249,1))",
+                                "border-radius": "2em 0em 2em 2em",
+                                "height" : "100%",
+                            },
+                        ),
+                        style={"padding": "0 1em 1em 1em", "margin": "0", "width":"100%", "height": "50%"}
+                    ),
+                    html.Div(
+                        dbc.Card(
+                            dbc.CardBody(children=[
+                                dcc.Graph(figure = humidity_fig, config=config, style={"height": "100%"}),
+                                html.P("%", style={
+                                    "position":"absolute", "font-size":"1.7em", "right":"0.3em", "top": "0em",
+                                    "color": "#323841ff",
+                                    })
+                                ]
+                            ),
+                            style={
+                                "background": "linear-gradient(60deg, rgba(249,249,249,0.5), rgba(249,249,249,1))",
+                                "border-radius": "2em 0em 2em 2em",
+                                "height": "100%",
+                            }
+                        ),
+                        style={"padding": "0 1em 1em 1em", "margin": "0", "width":"100%", "height": "50%"}
+                    ),
+            ],
+            no_gutters=True,
+            style={"height": "80vh"}
+        ),
+    ],
+    style={
+        "background-image": "linear-gradient(#939dac, #d5e5ff)",
+        "height": "100vh",
+        "padding": "0",
+        },
+    fluid=True
+)
+
+if __name__ == '__main__':
+    app.run_server(debug=True)
