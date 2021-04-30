@@ -33,11 +33,12 @@ common_layout = {
         "tickfont": {"size": 20}
     },
     "xaxis": {
+	"nticks": 3,
         "showgrid": False,
         "title_text": None,
         "zeroline": False,
         "fixedrange": True,
-        "tickformat": "%H:%M",        
+        "tickformat": "%e<br>%I:%M<br>%p",        
     },
     "showlegend": False,
     "margin": {"l":4,"r":4,"t":0, "b":0, "pad": 4}    
