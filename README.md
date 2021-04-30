@@ -140,7 +140,7 @@ user=
 password=
 sslmode=require
 ```
-You can get the detials by running `heroku pg:credentials:url -a your-app-name.`
+You can get the details by running `heroku pg:credentials:url -a your-app-name.`
 
 <!-- USAGE EXAMPLES -->
 ## Usage
