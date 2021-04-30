@@ -19,7 +19,7 @@ def data_today(conn, date=None):
         """
         SELECT created_on, temperature, humidity
         FROM dht_data
-        WHERE created_on::date = now()::date
+        WHERE (created_on at time zone 'asia/calcutta')::date = (now() at time zone 'asia/calcutta')::date
         """)
     if cursor.rowcount == 0:
         print("[WARN] No data found for today.")
