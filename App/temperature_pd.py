@@ -18,7 +18,7 @@ def data_today(conn, date=None):
     tuples = cursor.fetchall()
     cursor.close()
     df = pd.DataFrame(tuples, columns=["time", "temperature", "humidity"])
-    df['time'] = pd.to_datetime(df['time']).dt.tz.localize('UTC').dt.tz_convert("Asia/Calcutta")
+    df['time'] = pd.to_datetime(df['time']).dt.tz_localize('UTC').dt.tz_convert("Asia/Calcutta")
     df['temperature'] = pd.to_numeric(df['temperature'])
     df['humidity'] = pd.to_numeric(df['humidity'])
     return df
