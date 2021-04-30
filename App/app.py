@@ -169,7 +169,7 @@ def serve_layout():
                         ),
                 ],
                 no_gutters=True,
-                style={"height": "80vh"}
+                style={"height": "70vh"}
             ),
         ],
         style={

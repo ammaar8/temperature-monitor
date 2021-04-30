@@ -43,6 +43,7 @@
         <li><a href="#schematic">Schematic</a></li>
         <li><a href="#arduino">Arduino</a></li>
         <li><a href="#app">App</a></li>
+        <li><a href="#logger">Logger</a></li>
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
@@ -85,7 +86,7 @@ To get started with this project you will need:
 ### Install
 1. Install python requirements
 ```
-pip3 install -r requirement.txt
+pip3 install -r requirements.txt
 ```
 2. Install [Heroku](https://devcenter.heroku.com/articles/heroku-cli)
 
@@ -97,21 +98,85 @@ Build the circuit according to the schematic.
 <!-- ARDUINO -->
 ### Arduino
 After completing the hardware part upload [temperature_monitor.ino](arduino/temperature_monitor.ino) to the arduino.
-<!-- APP -->
+
+<!-- App -->
 ### App
+First we need to create a heroku app. Ensure you have installed heroku by running `heroku -v`. To create an app follow these steps:
+1. Login to heroku.
+```
+heroku login
+```
+2. Create a heroku app.
+```
+heroku create app-name
+```
+3. Once the app is created, we have to add the [Heroku Postgresql add-on](https://devcenter.heroku.com/articles/heroku-postgresql).
+```
+heroku addons:create heroku-postgresql:hobby-dev
+```
+4. After adding the add-on, we have to create a table on the app database.
+```
+heroku pg:psql -a app-name
+```
+```
+CREATE TABLE dht_data (
+  created_on serial not null,
+  logged_on timestamptz not null,
+  temperature numeric(4,2) not null,
+  humidity numeric(4,2) not null,
+);
+```
+This wil create a table named 'dht_data' with columns created_on, logged_on, temperature and humidity. We can now push data to our database from our temperature logger script.
 
-
+<!-- Logger -->
+### Logger
+To setup the logger to push data to our database reate a database.ini file with the database details in the `logger` folder.
+```
+[postgresql]
+database=
+host=
+port=
+user=
+password=
+sslmode=require
+```
+You can get the detials by running `heroku pg:credentials:url -a your-app-name.`
 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
 <!-- LOGGING DATA -->
 ### Logging
+To log sensor data:
+1. Check the `DEVICE_PATH` is set correcly in `temperature_logger.py`
+2. Run `python3 temperature_logger.py`
 
 <!-- DEPLOYING TO HEROKU -->
 ### Deploying
+We are only deploying the App folder of the project on Heorku. To do this, we make use of the subtree command in git. Run this to push the App to heroku
+```
+git subtree --prefix App push heroku main
+```
+Once the app is deployed, it will print a url like http://temperature-monitor.herokuapp.com which you can visit to view the app. 
 
-
+### Running Locally
+If you are looking to run the project locally, create a duplicate of the database.ini file in the `App` folder.
+In `app.py` replace 
+```
+def update_data():
+    global temperature_fig, humidity_fig
+    conn = temperature_pd.connect_database()
+    df = temperature_pd.data_today(conn)
+    ...
+```
+with 
+```
+def update_data():
+    global temperature_fig, humidity_fig
+    conn = temperature_pd.connect_database_local()
+    df = temperature_pd.data_today(conn)
+    ...
+```    
 <!-- CONTRIBUTING -->
 ## Contributing
 

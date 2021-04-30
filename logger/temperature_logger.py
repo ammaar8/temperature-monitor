@@ -8,9 +8,10 @@ import pytz
 from datetime import datetime, timedelta
 from config import config
 
+DEVICE_PATH = '/dev/ttyACM1' 
 try:
     arduino = serial.Serial(
-        port='/dev/ttyACM1', # Replace with Arduino path
+        port=DEVICE_PATH, # Replace with Arduino path
         baudrate=9600,
         timeout=0.1)
 except serial.SerialException as e:

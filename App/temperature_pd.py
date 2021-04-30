@@ -8,14 +8,12 @@ def connect_database_local():
     conn = psycopg2.connect(**params)
     return conn
 
-
 def connect_database():
     DATABASE_URL = os.environ['DATABASE_URL']
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     return conn
 
 def data_today(conn, date=None):
-    # TODO - Add exception handling for no data
     cursor = conn.cursor()
     cursor.execute(
         """
