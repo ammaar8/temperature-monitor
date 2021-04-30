@@ -18,8 +18,8 @@ except serial.SerialException as e:
     print(e)
 
 def connect_database():
-    # DATABASE_URL = os.environ['DATABASE_URL']
-    # conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+#    DATABASE_URL = os.environ['DATABASE_URL']
+#    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     params = config()
     conn = psycopg2.connect(**params)
     print("Connected to database")

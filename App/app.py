@@ -37,10 +37,11 @@ common_layout = {
         "title_text": None,
         "zeroline": False,
         "fixedrange": True,
-        "tickformat": "%e/%m<br>%I:%M %p",        
+        "tickformat": "%e/%m<br>%I:%M %p",
+	"tickfont": {"size":12}
     },
     "showlegend": False,
-    "margin": {"l":4,"r":4,"t":0, "b":0, "pad": 4}    
+    "margin": {"l":4,"r":4,"t":0, "b":0, "pad": 2}    
 }
 config = {'displayModeBar': False}
 

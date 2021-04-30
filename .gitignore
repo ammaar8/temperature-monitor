@@ -131,4 +131,6 @@ dmypy.json
 #.ini files
 App/database.ini
 App/env
+App/.env
 logger/database.ini
+
