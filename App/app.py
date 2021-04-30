@@ -56,8 +56,18 @@ def update_data():
         humidity_min = df['humidity'].min()
         temperature_fig = px.line(x=df['time'], y=df['temperature'])
         humidity_fig = px.line(x=df['time'], y=df['humidity'])
-
-
+        temperature_layout = {
+            "yaxis": {
+                "tickvals": [temp_min, temp_max], 
+                "ticktext": [f"{temp_min}", f"{temp_max}"],
+                },
+        }
+        humidity_layout = {
+            "yaxis": {
+                "tickvals": [math.floor(humidity_min), math.ceil(humidity_max)], 
+                "ticktext": [f"{math.floor(humidity_min)}", f"{math.ceil(humidity_max)}"],
+                },
+        }
         temperature_fig.update_layout(temperature_layout)
         temperature_fig.update_layout(common_layout)
         temperature_fig.update_traces(line={"color":"black"})
@@ -69,14 +79,18 @@ def update_data():
         humidity_fig = go.Figure()
         temperature_layout = {
             "yaxis": {
-                "tickvals": [temp_min, temp_max], 
-                "ticktext": [f"{temp_min}", f"{temp_max}"],
+                'showticklabels': False,
+                },
+            "xaxis": {
+                'showticklabels': False,
                 },
         }
         humidity_layout = {
             "yaxis": {
-                "tickvals": [math.floor(humidity_min), math.ceil(humidity_max)], 
-                "ticktext": [f"{math.floor(humidity_min)}", f"{math.ceil(humidity_max)}"],
+                'showticklabels': False,
+                },
+            "xaxis": {
+                'showticklabels': False,
                 },
         }
         temperature_fig.update_layout(common_layout)
