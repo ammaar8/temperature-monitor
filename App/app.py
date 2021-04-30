@@ -18,8 +18,6 @@ app = dash.Dash(
 )
 app.title = "Temp Monitor"
 server = app.server
-conn = temperature_pd.connect_database()
-df = temperature_pd.data_today(conn)
 
 common_layout = {
     "plot_bgcolor": "rgba(0, 0, 0, 0)",
@@ -50,6 +48,9 @@ humditiy_fig = None
 
 def update_data():
     global temperature_fig, humidity_fig
+    conn = temperature_pd.connect_database()
+    df = temperature_pd.data_today(conn)
+
     if df is not None:
         temp_max = df['temperature'].max()
         temp_min = df['temperature'].min()
