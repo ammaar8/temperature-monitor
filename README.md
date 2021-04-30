@@ -1,4 +1,4 @@
-[![MIT License][license-shield]][license-url]
+                                                                                                                                                                                                                                                                        [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 
@@ -28,8 +28,7 @@
 </p>
 
 
-
-<!-- TABLE OF CONTENTS -->
+<!-- TABLE OF CONTENTS -->                                          
 <details open="open">
   <summary>Table of Contents</summary>
   <ol>
@@ -161,23 +160,16 @@ git subtree --prefix App push heroku main
 Once the app is deployed, it will print a url like http://temperature-monitor.herokuapp.com which you can visit to view the app. 
 
 ### Running Locally
-If you are looking to run the project locally, create a duplicate of the database.ini file in the `App` folder.
-In `app.py` replace 
+Running locally is required to test changes before deploying the app. Here is how to do it.
+1. `cd` to `App` folder and copy Heroku config vars to local .env file.
 ```
-def update_data():
-    global temperature_fig, humidity_fig
-    conn = temperature_pd.connect_database()
-    df = temperature_pd.data_today(conn)
-    ...
+heroku config:get DATABASE_URL -s  >> .env
 ```
-with 
+2. Run the app.
 ```
-def update_data():
-    global temperature_fig, humidity_fig
-    conn = temperature_pd.connect_database_local()
-    df = temperature_pd.data_today(conn)
-    ...
-```    
+heroku local
+```
+
 <!-- CONTRIBUTING -->
 ## Contributing
 
