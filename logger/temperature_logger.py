@@ -32,21 +32,6 @@ def read_data():
 def request_data():
     arduino.write('a'.encode())
 
-def insert_data(ts, t, h):
-    try:
-        conn = connect_database()
-        cur = conn.cursor()
-        cur.execute(
-            """INSERT INTO dht_data (created_on, temperature, humidity) values (%s,%s,%s)""",
-            (ts, t, h)
-        )
-        cur.close()
-        conn.commit()
-        conn.close()
-        print("Inserted data", ts, t, h)
-    except Exception as e:
-        print(e)
-
 
 def log_reading():
     params = config()
@@ -58,17 +43,22 @@ def log_reading():
         t, h = data.split(',')
         t = float(t)
         h = float(h)
-        conn = connect_database()
-        cur = conn.cursor()
-        ts = datetime.now(pytz.timezone("Asia/Calcutta"))
-        cur.execute(
-            """INSERT INTO dht_data (created_on, temperature, humidity) values (%s,%s,%s)""",
-            (ts, t, h)
-        )
-        cur.close()
-        conn.commit()
-        conn.close()
-        print("Data logged at", ts)
+        try:
+            conn = connect_database()
+            cur = conn.cursor()
+            ts = datetime.now(pytz.timezone("Asia/Calcutta"))
+            cur.execute(
+                """INSERT INTO dht_data (created_on, temperature, humidity) values (%s,%s,%s)""",
+                (ts, t, h)
+            )
+            cur.close()
+            conn.commit()
+            conn.close()
+            print("Data logged at", ts)
+        except Exception as e:
+            # Add data locally till connection is restored
+            print("Could not connect to the database with the error:\n", e)
+
 
 def main():
     last_log = datetime.now(pytz.timezone("Asia/Calcutta")) # Adjust Timezone if required
