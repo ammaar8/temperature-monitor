@@ -6,6 +6,7 @@ import psycopg2
 import os
 import pytz
 from datetime import datetime, timedelta
+from config import config
 
 try:
     arduino = serial.Serial(
@@ -16,8 +17,10 @@ except serial.SerialException as e:
     print(e)
 
 def connect_database():
-    DATABASE_URL = os.environ['DATABASE_URL']
-    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    # DATABASE_URL = os.environ['DATABASE_URL']
+    # conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    params = config()
+    conn = psycopg2.connect(**params)
     print("Connected to database")
     return conn
 
@@ -34,8 +37,6 @@ def request_data():
 
 
 def log_reading():
-    params = config()
-    conn = psycopg2.connect(**params)
     arduino.write('a'.encode())
     time.sleep(2)
     data = arduino.readline().decode('utf-8')[:-2]
@@ -65,7 +66,7 @@ def main():
     print("Data logging started!")
     while True:
         current_time = datetime.now(pytz.timezone("Asia/Calcutta")) # Adjust Timezone if required
-        if current_time - last_log > timedelta(minutes=5): # Delay between two readings
+        if current_time - last_log > timedelta(minutes=1): # Delay between two readings
             log_reading()
             last_log = current_time
             

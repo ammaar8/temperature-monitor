@@ -24,6 +24,7 @@ def data_today(conn, date=None):
         WHERE created_on::date = now()::date
         """)
     if cursor.rowcount == 0:
+        print("[WARN] No data found for today.")
         return None
 
     tuples = cursor.fetchall()
