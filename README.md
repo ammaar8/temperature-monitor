@@ -19,6 +19,8 @@
     <br />
     <a href="https://temperature-monitor.herokuapp.com/">View App</a>
     ·
+    <a href="https://youtu.be/yWvnplurRp4">Demo Video</a>
+    ·    
     <a href="https://github.com/ammaar8/temperature-monitor/issues">Report Bug</a>
     ·
     <a href="https://github.com/ammaar8/temperature-monitor/issues">Request Feature</a>
@@ -63,7 +65,6 @@
 ## About The Project
 
 ![Product Name Screen Shot](images/showcase.png)
-
 This is a hobby project in which sensor data is being published to a heroku database and can be visualized using a dash web app. This project can be repurposed to visualize any type of numeric data from sensors.
 
 
