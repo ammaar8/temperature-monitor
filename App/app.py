@@ -32,7 +32,6 @@ temperature_layout = {
     "paper_bgcolor": "rgba(0, 0, 0, 0)",
     "yaxis": {
         "showgrid": False,
-    #     "nticks": 2,
         "tickmode": "array",
         "tickvals": [temp_min, temp_max], 
         "title_text": None,
@@ -43,15 +42,10 @@ temperature_layout = {
     },
     "xaxis": {
         "showgrid": False,
-    #     "nticks": 3,
-    #     "tickmode": "array",
-    #     "tickvals": [0, 1, 2], 
         "title_text": None,
         "zeroline": False,
         "fixedrange": True,
         "tickformat": "%H:%M",        
-    #     "ticktext": [f"0", f"12", f"24"],
-    #     "tickfont": {"size": 16}
     },
     "showlegend": False,
     "margin": {"l":4,"r":4,"t":0, "b":0, "pad": 4}
@@ -73,14 +67,10 @@ humidity_layout = {
     },
     "xaxis": {
         "showgrid": False,
-    #     "nticks": 3,
-    #     "tickmode": "array",
-    #     "tickvals": [0, 1, 2], 
         "title_text": None,
         "zeroline": False,
         "fixedrange": True,
         "tickformat": "%H:%M",
-    #     "tickfont": {"size": 16}
     },
     "showlegend": False,
     "margin": {"l":4,"r":4,"t":0, "b":0, "pad": 4}
