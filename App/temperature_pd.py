@@ -33,5 +33,4 @@ def data_today(conn, date=None):
     df['time'] = pd.to_datetime(df['time']).dt.tz_convert("Asia/Calcutta")
     df['temperature'] = pd.to_numeric(df['temperature'])
     df['humidity'] = pd.to_numeric(df['humidity'])
-    print(df)
     return df

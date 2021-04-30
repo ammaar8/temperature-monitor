@@ -9,6 +9,8 @@ from datetime import datetime
 import pandas as pd
 import math
 
+# TODO - Use trigger to update data periodically
+
 app = dash.Dash(
     __name__,
     external_stylesheets=[dbc.themes.BOOTSTRAP],

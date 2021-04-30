@@ -10,7 +10,7 @@ from config import config
 
 try:
     arduino = serial.Serial(
-        port='/dev/ttyACM0', # Replace with Arduino path
+        port='/dev/ttyACM1', # Replace with Arduino path
         baudrate=9600,
         timeout=0.1)
 except serial.SerialException as e:
