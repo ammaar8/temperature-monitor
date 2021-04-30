@@ -42,18 +42,6 @@ common_layout = {
     "showlegend": False,
     "margin": {"l":4,"r":4,"t":0, "b":0, "pad": 4}    
 }
-temperature_layout = {
-    "yaxis": {
-        "tickvals": [temp_min, temp_max], 
-        "ticktext": [f"{temp_min}", f"{temp_max}"],
-        },
-}
-humidity_layout = {
-    "yaxis": {
-        "tickvals": [math.floor(humidity_min), math.ceil(humidity_max)], 
-        "ticktext": [f"{math.floor(humidity_min)}", f"{math.ceil(humidity_max)}"],
-        },
-}
 config = {'displayModeBar': False}
 
 temperature_fig = None
@@ -79,6 +67,18 @@ def update_data():
     else:
         temperature_fig = go.Figure()
         humidity_fig = go.Figure()
+        temperature_layout = {
+            "yaxis": {
+                "tickvals": [temp_min, temp_max], 
+                "ticktext": [f"{temp_min}", f"{temp_max}"],
+                },
+        }
+        humidity_layout = {
+            "yaxis": {
+                "tickvals": [math.floor(humidity_min), math.ceil(humidity_max)], 
+                "ticktext": [f"{math.floor(humidity_min)}", f"{math.ceil(humidity_max)}"],
+                },
+        }
         temperature_fig.update_layout(common_layout)
         humidity_fig.update_layout(common_layout)
         temperature_fig.update_layout(temperature_layout)
