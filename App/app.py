@@ -20,24 +20,16 @@ app.title = "Temp Monitor"
 server = app.server
 conn = temperature_pd.connect_database()
 df = temperature_pd.data_today(conn)
-temp_max = df['temperature'].max()
-temp_min = df['temperature'].min()
-humidity_max = df['humidity'].max()
-humidity_min = df['humidity'].min()
-temperature_fig = px.line(x=df['time'], y=df['temperature'])
-humidity_fig = px.line(x=df['time'], y=df['humidity'])
 
-temperature_layout = {
+common_layout = {
     "plot_bgcolor": "rgba(0, 0, 0, 0)",
     "paper_bgcolor": "rgba(0, 0, 0, 0)",
     "yaxis": {
         "showgrid": False,
         "tickmode": "array",
-        "tickvals": [temp_min, temp_max], 
         "title_text": None,
         "zeroline": False,
         "fixedrange": True,
-        "ticktext": [f"{temp_min}", f"{temp_max}"],
         "tickfont": {"size": 20}
     },
     "xaxis": {
@@ -48,39 +40,64 @@ temperature_layout = {
         "tickformat": "%H:%M",        
     },
     "showlegend": False,
-    "margin": {"l":4,"r":4,"t":0, "b":0, "pad": 4}
+    "margin": {"l":4,"r":4,"t":0, "b":0, "pad": 4}    
 }
 
-humidity_layout = {
-    "plot_bgcolor": "rgba(0, 0, 0, 0)",
-    "paper_bgcolor": "rgba(0, 0, 0, 0)",
-    "yaxis": {
-        "showgrid": False,
-    #     "nticks": 2,
-        "tickmode": "array",
-        "tickvals": [math.floor(humidity_min), math.ceil(humidity_max)], 
-        "title_text": None,
-        "zeroline": False,
-        "fixedrange": True,
-        "ticktext": [f"{math.floor(humidity_min)}", f"{math.ceil(humidity_max)}"],
-        "tickfont": {"size": 20}
-    },
-    "xaxis": {
-        "showgrid": False,
-        "title_text": None,
-        "zeroline": False,
-        "fixedrange": True,
-        "tickformat": "%H:%M",
-    },
-    "showlegend": False,
-    "margin": {"l":4,"r":4,"t":0, "b":0, "pad": 4}
-}
+if df is not None:
+    temp_max = df['temperature'].max()
+    temp_min = df['temperature'].min()
+    humidity_max = df['humidity'].max()
+    humidity_min = df['humidity'].min()
+    temperature_fig = px.line(x=df['time'], y=df['temperature'])
+    humidity_fig = px.line(x=df['time'], y=df['humidity'])
+    temperature_layout = {
+        "yaxis": {
+            "tickvals": [temp_min, temp_max], 
+            "ticktext": [f"{temp_min}", f"{temp_max}"],
+            },
+    }
+
+    humidity_layout = {
+        "yaxis": {
+            "tickvals": [math.floor(humidity_min), math.ceil(humidity_max)], 
+            "ticktext": [f"{math.floor(humidity_min)}", f"{math.ceil(humidity_max)}"],
+            },
+    }
+
+    temperature_fig.update_layout(temperature_layout)
+    temperature_fig.update_layout(common_layout)
+    temperature_fig.update_traces(line={"color":"black"})
+    humidity_fig.update_layout(humidity_layout)
+    humidity_fig.update_layout(common_layout)
+    humidity_fig.update_traces(line={"color":"black"})
+else:
+    temperature_fig = go.Figure()
+    humidity_fig = go.Figure()
+
+    temperature_layout = {
+        "yaxis": {
+            "showticklabels": False,
+            },
+        "xaxis": {
+            "showticklabels": False,
+            },
+    }
+
+    humidity_layout = {
+        "yaxis": {
+            "showticklabels": False,
+            },
+        "xaxis": {
+            "showticklabels": False,
+            },            
+    }        
+    temperature_fig.update_layout(common_layout)
+    humidity_fig.update_layout(common_layout)
+    temperature_fig.update_layout(temperature_layout)
+    humidity_fig.update_layout(humidity_layout)
+
 config = {'displayModeBar': False}
 
-temperature_fig.update_layout(temperature_layout)
-temperature_fig.update_traces(line={"color":"black"})
-humidity_fig.update_layout(humidity_layout)
-humidity_fig.update_traces(line={"color":"black"})
 
 app.layout = dbc.Container(
     children=[
