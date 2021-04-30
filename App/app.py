@@ -49,6 +49,7 @@ humditiy_fig = None
 
 
 def update_data():
+    global temperature_fig, humidity_fig
     if df is not None:
         temp_max = df['temperature'].max()
         temp_min = df['temperature'].min()
@@ -100,6 +101,7 @@ def update_data():
 
 
 def serve_layout():
+    global temperature_fig, humidity_fig
     update_data()
     layout = dbc.Container(
         children=[
