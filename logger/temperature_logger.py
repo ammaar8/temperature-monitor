@@ -8,7 +8,10 @@ import pytz
 from datetime import datetime, timedelta
 from config import config
 
-DEVICE_PATH = '/dev/ttyACM1' 
+TIMEZONE = "Asia/Calcutta"
+TIME_BETWEEN_READINGS = timedelta(minutes=1)
+DEVICE_PATH = '/dev/ttyACM0' 
+
 try:
     arduino = serial.Serial(
         port=DEVICE_PATH, # Replace with Arduino path
@@ -48,7 +51,7 @@ def log_reading():
         try:
             conn = connect_database()
             cur = conn.cursor()
-            ts = datetime.now(pytz.timezone("Asia/Calcutta"))
+            ts = datetime.now(pytz.timezone(TIMEZONE))
             cur.execute(
                 """INSERT INTO dht_data (created_on, temperature, humidity) values (%s,%s,%s)""",
                 (ts, t, h)
@@ -63,11 +66,11 @@ def log_reading():
 
 
 def main():
-    last_log = datetime.now(pytz.timezone("Asia/Calcutta")) # Adjust Timezone if required
+    last_log = datetime.now(pytz.timezone(TIMEZONE)) # Adjust Timezone if required
     print("Data logging started!")
     while True:
-        current_time = datetime.now(pytz.timezone("Asia/Calcutta")) # Adjust Timezone if required
-        if current_time - last_log > timedelta(minutes=1): # Delay between two readings
+        current_time = datetime.now(pytz.timezone(TIMEZONE)) # Adjust Timezone if required
+        if current_time - last_log > TIME_BETWEEN_READINGS: # Delay between two readings
             log_reading()
             last_log = current_time
             

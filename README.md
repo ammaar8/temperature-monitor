@@ -130,17 +130,32 @@ This wil create a table named 'dht_data' with columns created_on, logged_on, tem
 
 <!-- Logger -->
 ### Logger
-To setup the logger to push data to our database reate a database.ini file with the database details in the `logger` folder.
+To setup the logger to push data to our enter the details in the logger/database.ini with the database details in the `logger` folder.
 ```
 [postgresql]
-database=
+dbname=
 host=
 port=
 user=
 password=
 sslmode=require
 ```
-You can get the details by running `heroku pg:credentials:url -a your-app-name.`
+You can get the details by running 
+```
+heroku pg:credentials:url -a app-name.
+```
+Once your are done with this you can adjust the timezone, time between readings and arduino port number in the temperature_logger.py file. 
+You can get your time zone name from [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
+Example -
+```
+TIMEZONE = "Asia/Calcutta"
+TIME_BETWEEN_READINGS = timedelta(minutes=1)
+DEVICE_PATH = '/dev/ttyACM0'
+```
+If you want other durations you can use this
+```
+timedelta(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, weeks=0)
+```
 
 <!-- USAGE EXAMPLES -->
 ## Usage
