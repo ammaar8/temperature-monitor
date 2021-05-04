@@ -130,7 +130,8 @@ This wil create a table named 'dht_data' with columns created_on, logged_on, tem
 
 <!-- Logger -->
 ### Logger
-To setup the logger to push data to our enter the details in the logger/database.ini with the database details in the `logger` folder.
+To setup the logger to push data to our database, create a file database.ini in the logger folder and fill it with with the database details.
+Template for database.ini file -
 ```
 [postgresql]
 dbname=
