@@ -123,7 +123,7 @@ CREATE TABLE dht_data (
   created_on serial not null,
   logged_on timestamptz not null,
   temperature numeric(4,2) not null,
-  humidity numeric(4,2) not null,
+  humidity numeric(4,2) not null
 );
 ```
 This wil create a table named 'dht_data' with columns created_on, logged_on, temperature and humidity. We can now push data to our database from our temperature logger script.
