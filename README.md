@@ -120,8 +120,8 @@ heroku pg:psql -a app-name
 ```
 ```
 CREATE TABLE dht_data (
-  created_on serial not null,
-  logged_on timestamptz not null,
+  reading_id serial not null,
+  created_on timestamptz not null,
   temperature numeric(4,2) not null,
   humidity numeric(4,2) not null
 );
