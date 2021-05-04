@@ -165,7 +165,7 @@ timedelta(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0,
 ### Logging
 To log sensor data:
 1. Check the `DEVICE_PATH` is set correcly in `temperature_logger.py`
-2. Run `python3 temperature_logger.py`
+2. Run `python3 temperature_logger.py` (Be sure to run it from the /logger folder)
 
 <!-- DEPLOYING TO HEROKU -->
 ### Deploying
